@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const posts = await prisma.post.findMany({
+  const posts = await db.post.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -12,7 +12,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const { title, content } = await request.json();
-  const newPost = await prisma.post.create({
+  const newPost = await db.post.create({
     data: {
       title,
       content,

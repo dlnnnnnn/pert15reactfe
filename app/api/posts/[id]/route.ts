@@ -1,10 +1,10 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const post = await prisma.post.findUnique({
+  const post = await db.post.findUnique({
     where: {
       id: Number(id),
     },
@@ -18,7 +18,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  await prisma.post.delete({
+  await db.post.delete({
     where: {
       id: Number(id),
     },
