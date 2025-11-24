@@ -1,8 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
 
   const post = await prisma.post.findUnique({
     where: {
@@ -15,19 +18,17 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   return NextResponse.json(post);
 }
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
   const { title, content } = await request.json();
 
   try {
     const updatedPost = await prisma.post.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        title,
-        content,
-      },
+      where: { id: Number(id) },
+      data: { title, content },
     });
 
     return NextResponse.json(updatedPost);
@@ -36,14 +37,15 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
 
   try {
     await prisma.post.delete({
-      where: {
-        id: Number(id),
-      },
+      where: { id: Number(id) },
     });
 
     return NextResponse.json({ message: "Deleted" }, { status: 200 });
